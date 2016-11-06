@@ -1,0 +1,117 @@
+数据库名称: 12306
+
+并发数记录
+设置为128个并发，爬取256个车站之间的数据
+需要耗时:
+
+
+以上海到天津的为例
+
+爬取车站之间的信息API
+https://kyfw.12306.cn/otn/leftTicket/queryX?leftTicketDTO.train_date=2016-11-06&leftTicketDTO.from_station=SHH&leftTicketDTO.to_station=TJP&purpose_codes=ADULT
+
+爬取车次信息的API
+https://kyfw.12306.cn/otn/czxx/queryByTrainNo?train_no=5l0000G21230&from_station_telecode=AOH&to_station_telecode=TXP&depart_date=2016-11-06
+站序 站名 到达时间 出发时间 停留时间
+
+爬取票价的API
+https://kyfw.12306.cn/otn/leftTicket/queryTicketPrice?train_no=5l0000G21230&from_station_no=01&to_station_no=10&seat_types=OM9&train_date=2016-11-06
+
+https://kyfw.12306.cn/otn/leftTicket/queryTicketPrice?train_no=5l0000G21230&from_station_no=01&to_station_no=10&train_date=2016-11-06
+
+
+数据库设计:
+-- 车站编码表
+create table station (
+	shortname1 varchar(20) not null COMMENT '车站简称1',
+	name varchar(20) not null COMMENT '车站名称',
+	code varchar(20) not null COMMENT '车站编码',
+	fullname varchar(20) not null COMMENT '车站拼音全称',
+	shortname2 varchar(20) not null COMMENT '车站简称2',
+	no int(20) not null COMMENT '序号'
+);
+alter table station COMMENT='车站编码表';
+
+load data infile 'f:/12306/all_station.csv' 
+into table station 
+fields terminated by ',' optionally enclosed by '"' escaped by '"'
+lines terminated by '\n';
+
+-- 车站关系表
+create table station_relation (
+  train_no varchar(200) DEFAULT NULL COMMENT '车次号,相当于主键',
+  station_train_code varchar(200) DEFAULT NULL COMMENT '车次',
+  start_station_telecode varchar(200) DEFAULT NULL COMMENT '起点车站编号',
+  start_station_name varchar(200) DEFAULT NULL COMMENT '起始车站名',
+  end_station_telecode varchar(200) DEFAULT NULL COMMENT '终点车站编号',
+  end_station_name varchar(200) DEFAULT NULL COMMENT '终点车站名',
+  from_station_telecode varchar(200) DEFAULT NULL COMMENT '出发地编码',
+  from_station_name varchar(200) DEFAULT NULL COMMENT '出发地',
+  to_station_telecode varchar(200) DEFAULT NULL COMMENT '目的地编码',
+  to_station_name varchar(200) DEFAULT NULL COMMENT '目的地',
+  start_time varchar(200) DEFAULT NULL COMMENT '出发时间',
+  arrive_time varchar(200) DEFAULT NULL COMMENT '到达时间',
+  day_difference varchar(200) DEFAULT NULL COMMENT '跨天',
+  train_class_name varchar(200) DEFAULT NULL,
+  lishi varchar(200) DEFAULT NULL COMMENT '耗时',
+  canWebBuy varchar(200) DEFAULT NULL COMMENT '是否允许网上购买',
+  lishiValue varchar(200) DEFAULT NULL COMMENT '历时分钟',
+  yp_info varchar(200) DEFAULT NULL,
+  control_train_day varchar(200) DEFAULT NULL,
+  start_train_date varchar(200) DEFAULT NULL,
+  seat_feature varchar(200) DEFAULT NULL,
+  yp_ex varchar(200) DEFAULT NULL,
+  train_seat_feature varchar(200) DEFAULT NULL,
+  seat_types varchar(200) DEFAULT NULL,
+  location_code varchar(200) DEFAULT NULL,
+  from_station_no varchar(200) DEFAULT NULL,
+  to_station_no varchar(200) DEFAULT NULL,
+  control_day varchar(200) DEFAULT NULL,
+  sale_time varchar(200) DEFAULT NULL,
+  is_support_card varchar(200) DEFAULT NULL,
+  controlled_train_flag varchar(200) DEFAULT NULL,
+  controlled_train_message varchar(200) DEFAULT NULL
+);
+alter table station_relation comment='车站编码表';
+
+load data infile 'f:/12306/station_relation_info.csv' 
+into table station_relation 
+fields terminated by ',' optionally enclosed by '"' escaped by '"'
+lines terminated by '\n';
+
+-- 列车车次表
+create table train_number (
+	train_no varchar(200) DEFAULT NULL COMMENT '车次号,相当于主键',
+  station_train_code varchar(200) DEFAULT NULL COMMENT '车次',
+  service_type varchar(200) DEFAULT NULL COMMENT '类型',
+  arrive_time  varchar(200) DEFAULT NULL COMMENT '到达时间',
+  station_name varchar(200) DEFAULT NULL COMMENT '到站名称',
+  start_time varchar(200) DEFAULT NULL COMMENT '开车时间',
+  stopover_time varchar(200) DEFAULT NULL COMMENT '停车分钟',
+  station_no varchar(200) DEFAULT NULL COMMENT '站序',
+  isEnabled varchar(200) DEFAULT NULL COMMENT '状态'	
+);
+alter table train_number comment='列车车次表';
+load data infile 'f:/12306/train_info.csv' 
+into table train_number 
+fields terminated by ',' optionally enclosed by '"' escaped by '"'
+lines terminated by '\n';
+
+
+-- 列车票价表
+create table ticket (
+	swz varchar(200) DEFAULT NULL COMMENT '商务座',
+	ydz varchar(200) DEFAULT NULL COMMENT '一等座',
+	edz varchar(200) DEFAULT NULL COMMENT '二等座',
+	rw varchar(200) DEFAULT NULL COMMENT '软卧',
+	yw varchar(200) DEFAULT NULL COMMENT '硬卧',
+	yz varchar(200) DEFAULT NULL COMMENT '硬座',
+	wz varchar(200) DEFAULT NULL COMMENT '无座',			
+	train_no varchar(200) DEFAULT NULL COMMENT '车次号,相当于主键'
+);
+alter table ticket comment='列车票价表';
+
+load data infile 'f:/12306/price_info.csv' 
+into table ticket 
+fields terminated by ',' optionally enclosed by '"' escaped by '"'
+lines terminated by '\n';
