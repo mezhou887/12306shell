@@ -2,7 +2,7 @@
 
 today=`date +%Y%m%d`
 date=`date -d "-7 days ago" +%Y-%m-%d`
-
+today2=`date +%Y%m%d%H`
 cd /home/mezhou887/Desktop/
 rm -rf ${today} 
 mkdir ${today}
@@ -13,7 +13,12 @@ echo 'start: '`date` >> /home/mezhou887/Desktop/12306/${today}.log
 # 生成所有车站编码表和主要车站编码表: all_station.csv station_top.csv
 result=$(curl -k 'https://kyfw.12306.cn/otn/resources/js/framework/station_name.js?station_version=1.8970')
 echo ${result} | cut -d "'" -f 2 | tr "@" "\n" | tr "|" "," | sed -e '/^$/d' > all_station.csv
-head -256 all_station.csv > station_top.csv
+
+# 随机取数据用下面的
+sort -R all_station.csv | head -100 > station_top.csv
+
+# 按顺序取用下面的
+# head -50 all_station.csv > station_top.csv
 
 
 # 生成车站之间的关系请求表: station_relation_request.csv
@@ -66,21 +71,23 @@ cat station_relation_info.csv | while read line
 do
     train_no=$(echo ${line} | cut -d "," -f 1)
     seat_types=$(echo ${line} | cut -d "," -f 24)
-    from_station_no=$(echo ${line} | cut -d "," -f 26)
+    from_station_no=01 # $(echo ${line} | cut -d "," -f 26)
     to_station_no=$(echo ${line} | cut -d "," -f 27)
     echo " -k 'https://kyfw.12306.cn/otn/leftTicket/queryTicketPrice?train_no=${train_no}&from_station_no=${from_station_no}&to_station_no=${to_station_no}&seat_types=${seat_types}&train_date=${date}' -o 'price_request/${train_no}-${from_station_no}-${to_station_no}-${seat_types}.json'" >>all_price_info_tmp.csv
 done
 sort all_price_info_tmp.csv | uniq > all_price_info.csv
 cat all_price_info.csv | wc >> /home/mezhou887/Desktop/12306/${today}.log
 cat all_price_info.csv | xargs -r -L 1 -P 128 curl
-python '/home/mezhou887/Product/12306_handler.py' 'price' 'price_request'  'price_info.csv'
+python '/home/mezhou887/Product/12306_handler.py' 'price' 'price_request'  'price_info_tmp.csv'
+sort price_info_tmp.csv | uniq > price_info.csv
 rm -rf all_price_info_tmp.csv
+rm -rf price_info_tmp.csv
 rm -rf price_request
 echo 'end parse price request : '`date` >> /home/mezhou887/Desktop/12306/${today}.log
 
 # 打包压缩文件
 cd /home/mezhou887/Desktop
-python '/home/mezhou887/Product/12306_handler.py' 'zip' ${today} '12306/'${today}'.zip'
+python '/home/mezhou887/Product/12306_handler.py' 'zip' ${today} '12306/'${today2}'.zip'
 
 # 同步到百度云
 cd 12306

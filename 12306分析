@@ -77,7 +77,7 @@ alter table station_relation comment='车站编码表';
 load data infile 'f:/12306/station_relation_info.csv' 
 into table station_relation 
 fields terminated by ',' optionally enclosed by '"' escaped by '"'
-lines terminated by '\n';
+lines terminated by '\r\n';
 
 -- 列车车次表
 create table train_number (
@@ -95,7 +95,7 @@ alter table train_number comment='列车车次表';
 load data infile 'f:/12306/train_info.csv' 
 into table train_number 
 fields terminated by ',' optionally enclosed by '"' escaped by '"'
-lines terminated by '\n';
+lines terminated by '\r\n';
 
 
 -- 列车票价表
@@ -103,6 +103,7 @@ create table ticket (
 	swz varchar(200) DEFAULT NULL COMMENT '商务座',
 	ydz varchar(200) DEFAULT NULL COMMENT '一等座',
 	edz varchar(200) DEFAULT NULL COMMENT '二等座',
+	gjrw varchar(200) DEFAULT NULL COMMENT '高级软卧',
 	rw varchar(200) DEFAULT NULL COMMENT '软卧',
 	yw varchar(200) DEFAULT NULL COMMENT '硬卧',
 	yz varchar(200) DEFAULT NULL COMMENT '硬座',

@@ -123,18 +123,21 @@ def parse_price(trainsdir, outfile):
                     price_data = data["data"]
                     price_data.pop("OT");
                     for i in  price_data:
-                        if i in ['A9', 'M', 'O', 'A4', 'A3', 'A1', 'WZ']:
+                        if i in ['A9', 'M', 'O', 'A6', 'A4', 'A3', 'A1', 'WZ']:
                             price_data[i] = price_data[i][1:]
 
                     swz = price_data.get("A9") #商务座
+                                               #特等座
                     ydz = price_data.get("M")  #一等座
                     edz = price_data.get("O")  #二等座 
+                    gjrw= price_data.get("A6")  #高级软卧
                     rw  = price_data.get("A4") #软卧
                     yw  = price_data.get("A3") #硬卧
+                                               #软座
                     yz  = price_data.get("A1") #硬座
                     wz  = price_data.get("WZ") #无座
                     train_no = price_data.get("train_no")
-                    row = [swz, ydz, edz, rw, yw, yz,wz, train_no]
+                    row = [swz, ydz, edz, gjrw, rw, yw, yz,wz, train_no]
                     writer.writerow(row)
     csvfile.close()
 
