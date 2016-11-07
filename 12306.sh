@@ -15,7 +15,7 @@ result=$(curl -k 'https://kyfw.12306.cn/otn/resources/js/framework/station_name.
 echo ${result} | cut -d "'" -f 2 | tr "@" "\n" | tr "|" "," | sed -e '/^$/d' > all_station.csv
 
 # 随机取数据用下面的
-sort -R all_station.csv | head -100 > station_top.csv
+sort -R all_station.csv | head -60 > station_top.csv
 
 # 按顺序取用下面的
 # head -50 all_station.csv > station_top.csv
@@ -91,6 +91,6 @@ python '/home/mezhou887/Product/12306_handler.py' 'zip' ${today} '12306/'${today
 
 # 同步到百度云
 cd 12306
-bypy.py syncup
+bypy.py upload
 
 echo 'end: '`date` >> /home/mezhou887/Desktop/12306/${today}.log
