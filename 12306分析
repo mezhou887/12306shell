@@ -22,6 +22,8 @@ https://kyfw.12306.cn/otn/leftTicket/queryTicketPrice?train_no=5l0000G21230&from
 
 数据库设计:
 -- 车站编码表
+
+drop table station;
 create table station (
 	shortname1 varchar(20) not null COMMENT '车站简称1',
 	name varchar(20) not null COMMENT '车站名称',
@@ -38,6 +40,7 @@ fields terminated by ',' optionally enclosed by '"' escaped by '"'
 lines terminated by '\n';
 
 -- 车站关系表
+drop table station_relation;
 create table station_relation (
   train_no varchar(200) DEFAULT NULL COMMENT '车次号,相当于主键',
   station_train_code varchar(200) DEFAULT NULL COMMENT '车次',
@@ -80,6 +83,7 @@ fields terminated by ',' optionally enclosed by '"' escaped by '"'
 lines terminated by '\r\n';
 
 -- 列车车次表
+drop table train_number;
 create table train_number (
 	train_no varchar(200) DEFAULT NULL COMMENT '车次号,相当于主键',
   station_train_code varchar(200) DEFAULT NULL COMMENT '车次',
@@ -92,27 +96,114 @@ create table train_number (
   isEnabled varchar(200) DEFAULT NULL COMMENT '状态'	
 );
 alter table train_number comment='列车车次表';
+
 load data infile 'f:/12306/train_info.csv' 
 into table train_number 
 fields terminated by ',' optionally enclosed by '"' escaped by '"'
 lines terminated by '\r\n';
 
 
--- 列车票价表
-create table ticket (
-	swz varchar(200) DEFAULT NULL COMMENT '商务座',
-	ydz varchar(200) DEFAULT NULL COMMENT '一等座',
-	edz varchar(200) DEFAULT NULL COMMENT '二等座',
-	gjrw varchar(200) DEFAULT NULL COMMENT '高级软卧',
-	rw varchar(200) DEFAULT NULL COMMENT '软卧',
-	yw varchar(200) DEFAULT NULL COMMENT '硬卧',
-	yz varchar(200) DEFAULT NULL COMMENT '硬座',
-	wz varchar(200) DEFAULT NULL COMMENT '无座',			
-	train_no varchar(200) DEFAULT NULL COMMENT '车次号,相当于主键'
-);
-alter table ticket comment='列车票价表';
-
-load data infile 'f:/12306/price_info.csv' 
-into table ticket 
+-- 二次加载
+load data infile 'f:/12306/station_relation_info.csv' 
+into table station_relation 
 fields terminated by ',' optionally enclosed by '"' escaped by '"'
-lines terminated by '\n';
+lines terminated by '\r\n';
+
+load data infile 'f:/12306/train_info.csv' 
+into table train_number 
+fields terminated by ',' optionally enclosed by '"' escaped by '"'
+lines terminated by '\r\n';
+
+
+-- 查询
+select distinct(train_no) from station_relation;
+select distinct(train_no) from train_number;
+select count(distinct(train_no)) from station_relation;
+select count(distinct(train_no)) from train_number;
+
+
+DROP TABLE train_detail_info_01;
+CREATE TABLE train_detail_info_01 AS SELECT a.*,
+    b.station_train_code,
+    b.start_station_telecode,
+    b.start_station_name,
+    b.end_station_telecode,
+    b.end_station_name,
+    b.seat_types FROM
+    (SELECT DISTINCT
+        train_no,
+            arrive_time,
+            station_name,
+            start_time,
+            stopover_time,
+            station_no
+    FROM
+        `12306`.train_number) a
+        LEFT JOIN
+    (SELECT DISTINCT
+        train_no,
+            station_train_code,
+            start_station_telecode,
+            start_station_name,
+            end_station_telecode,
+            end_station_name,
+            seat_types
+    FROM
+        `12306`.station_relation) b ON a.train_no = b.train_no;
+
+SELECT 
+    *
+FROM
+    train_detail_info_01;
+
+SELECT 
+    COUNT(*)
+FROM
+    train_detail_info_01;
+
+
+DROP TABLE train_detail_info_02;
+CREATE TABLE train_detail_info_02 AS SELECT a.train_no,
+    a.arrive_time,
+    a.station_name,
+    b.code,
+    a.start_time,
+    a.stopover_time,
+    a.station_no,
+    a.station_train_code,
+    a.start_station_telecode,
+    a.start_station_name,
+    a.end_station_telecode,
+    a.end_station_name,
+    a.seat_types FROM
+    `12306`.train_detail_info_01 a
+        LEFT JOIN
+    `12306`.station b ON a.station_name = b.name;
+
+SELECT 
+    *
+FROM
+    train_detail_info_02;
+    
+SELECT 
+    COUNT(*)
+FROM
+    train_detail_info_02;
+    
+    
+DROP TABLE train_detail_info_03;
+CREATE TABLE train_detail_info_03 AS 
+SELECT distinct a.train_no,
+    a.arrive_time,
+    a.station_name,
+    a.code,
+    a.start_time,
+    a.stopover_time,
+    a.station_no,
+    a.station_train_code,
+    a.start_station_telecode,
+    a.start_station_name,
+    a.end_station_telecode,
+    a.end_station_name
+FROM
+    `12306`.train_detail_info_02 a;   
