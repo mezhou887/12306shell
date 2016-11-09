@@ -25,9 +25,9 @@ link:
 	http://blog.bomobox.org/2016-09-11/scrapy-start/
 	
 安装脚本链接：
-	http://t.cn/RfwLDYH
-	http://dwz.cn/4yqLMl
-	http://t.im/18w2o
+	wget -c "http://t.cn/Rfwte2N" -O install_scrapy.sh
+	sudo sh install_scrapy.sh
+	
 	
 macOS Sierra:    10.12	
 OS X El Capitan: 10.11
