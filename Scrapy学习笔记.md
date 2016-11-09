@@ -6,6 +6,7 @@
 ##常用开始一个项目的命令##
 		1. 查看版本号: scrapy version
   	2. 创建项目: scrapy startproject tutorial
+  	3. 查看详细帮助: 
   	3. 运行项目: scrapy crawl 爬虫名
   	4. 
   	 

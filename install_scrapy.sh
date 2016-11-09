@@ -13,8 +13,9 @@ python -m pip install --upgrade pip
 pip install pybloom beautifulsoup4 xlwt lxml Flask requests redis scrapy scrapyd scrapylib scrapy-redis
 
 # 安装不是很必须的软件
-pip install django uwsgi selenium sqlalchemy pymysql fake-useragent 
-apt-get install nginx mongodb-server mongodb-client pymongo scrapy-mongodb python-virtualenv
+apt-get install python-mysqldb apache2 mysql-server mysql-client nginx mongodb-server mongodb-client pymongo scrapy-mongodb python-virtualenv
+pip install Django uwsgi selenium sqlalchemy pymysql fake-useragent 
+
 
 # 更新全部第三方库到最新版本
 pip list --outdated | grep '^[a-z]* (' | cut -d " " -f 1 | xargs pip install -U
