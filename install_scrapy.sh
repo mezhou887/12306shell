@@ -1,25 +1,25 @@
 #!/bin/bash
 
 
-# Éý¼¶»·¾³
+# å‡çº§çŽ¯å¢ƒ
 sudo apt-get update & dist-upgrade
 
-# °²×°ÐèÒªµÄÏµÍ³Èí¼þ
+# å®‰è£…éœ€è¦çš„ç³»ç»Ÿè½¯ä»¶
 sudo apt-get install python-dev python-pip ssh git
 
-# ½«pip¸üÐÂµ½×îÐÂ°æ
+# å°†pipæ›´æ–°åˆ°æœ€æ–°ç‰ˆ
 sudo python -m pip install --upgrade pip
 
-# °²×°python±ØÐëµÄÈí¼þ
+# å®‰è£…pythonå¿…é¡»çš„è½¯ä»¶
 sudo pip install flask requests redis scrapy scrapyd scrapylib scrapy-redis pybloom beautifulsoup4 xlwt
 
-# °²×°²»ÊÇºÜ±ØÐëµÄÈí¼þ
+# å®‰è£…ä¸æ˜¯å¾ˆå¿…é¡»çš„è½¯ä»¶
 sudo pip install virtualenv virtualenvwrapper django uwsgi selenium sqlalchemy pymysql fake-useragent 
 sudo apt-get install nginx mongodb-server mongodb-client pymongo scrapy-mongodb
 
-# ¸üÐÂÈ«²¿µÚÈý·½¿âµ½×îÐÂ°æ±¾
+# æ›´æ–°å…¨éƒ¨ç¬¬ä¸‰æ–¹åº“åˆ°æœ€æ–°ç‰ˆæœ¬
 pip list --outdated | grep '^[a-z]* (' | cut -d " " -f 1 | xargs pip install -U
 
-# µ¼³öËùÓÐµÚÈý·½¿âµ½requirements.txt
+# å¯¼å‡ºæ‰€æœ‰ç¬¬ä¸‰æ–¹åº“åˆ°requirements.txt
 pip freeze > requirements.txt
 
