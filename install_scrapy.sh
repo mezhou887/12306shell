@@ -2,7 +2,7 @@
 
 
 # 升级环境
-sudo apt-get update & dist-upgrade
+sudo apt-get update & apt-get dist-upgrade
 
 # 安装需要的系统软件
 sudo apt-get install python-dev python-pip ssh git
