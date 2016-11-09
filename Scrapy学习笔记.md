@@ -1,11 +1,4 @@
   + 安装
-		sudo apt-get update 
-		sudo apt-get upgrade
-		sudo apt-get install git
-		sudo apt-get install mysql-server
-		sudo apt-get install ssh
-		sudo apt-get install python-dev
-		sudo apt-get install python-pip
 		
   + 在原有的基础上hotflx，添加自己的模板的相关信息
   + 常用命令行开始一个项目
@@ -30,3 +23,16 @@
 
 link:
 	http://blog.bomobox.org/2016-09-11/scrapy-start/
+	
+安装脚本链接：
+	http://t.cn/RfwLDYH
+	http://dwz.cn/4yqLMl
+	http://t.im/18w2o
+	
+macOS Sierra:    10.12	
+OS X El Capitan: 10.11
+
+要有下载链接的,对应的文件名的:
+
+
+
