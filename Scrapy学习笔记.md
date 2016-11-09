@@ -1,10 +1,16 @@
 ##安装##
 		1. wget -c "http://t.cn/Rfwte2N" -O install_scrapy.sh
-		2. sudo sh install_scrapy.sh		
+		2. sudo sh install_scrapy.sh
+				
 ##在原有的基础上hotflx，添加自己的模板的相关信息##
-##常用命令行开始一个项目##
-  	
+##常用开始一个项目的命令##
+		1. 查看版本号: scrapy version
+  	2. 创建项目: scrapy startproject tutorial
+  	3. 运行项目: scrapy crawl 爬虫名
+  	4. 
+  	 
 ##Scrapy的架构图主要模块和主要部分##
+	
 ##CrawlerProcess通过代码运行爬虫##
 ##Request和Response对象##
 ##Spider的常用属性和方法##

@@ -10,7 +10,7 @@ apt-get install python-dev python-pip ssh git
 python -m pip install --upgrade pip
 
 # 安装python必须的软件
-pip install Flask requests redis scrapy scrapyd scrapylib scrapy-redis pybloom beautifulsoup4 xlwt
+pip install pybloom beautifulsoup4 xlwt lxml Flask requests redis scrapy scrapyd scrapylib scrapy-redis
 
 # 安装不是很必须的软件
 pip install django uwsgi selenium sqlalchemy pymysql fake-useragent 
