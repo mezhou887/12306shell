@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 升级环境
-#apt-get update & apt-get dist-upgrade
+apt-get update & apt-get dist-upgrade
 
 # 安装需要的系统软件
 apt-get install python-dev python-pip ssh git
@@ -13,8 +13,8 @@ python -m pip install --upgrade pip
 pip install pybloom beautifulsoup4 xlwt lxml Flask requests redis scrapy scrapyd scrapylib scrapy-redis
 
 # 安装不是很必须的软件
-apt-get install python-mysqldb apache2 mysql-server mysql-client nginx mongodb-server mongodb-client pymongo scrapy-mongodb python-virtualenv
-pip install Django uwsgi selenium sqlalchemy pymysql fake-useragent 
+apt-get install python-mysqldb apache2 mysql-server mysql-client nginx mongodb-server python-virtualenv
+pip install uwsgi selenium sqlalchemy pymysql fake-useragent 
 
 
 # 更新全部第三方库到最新版本
