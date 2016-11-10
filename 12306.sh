@@ -15,10 +15,10 @@ result=$(curl -k 'https://kyfw.12306.cn/otn/resources/js/framework/station_name.
 echo ${result} | cut -d "'" -f 2 | tr "@" "\n" | tr "|" "," | sed -e '/^$/d' > all_station.csv
 
 # 随机取数据用下面的
-sort -R all_station.csv | head -60 > station_top.csv
+# sort -R all_station.csv | head -60 > station_top.csv
 
 # 按顺序取用下面的
-# head -50 all_station.csv > station_top.csv
+head -5 all_station.csv > station_top.csv
 
 
 # 生成车站之间的关系请求表: station_relation_request.csv
@@ -26,7 +26,6 @@ sort -R all_station.csv | head -60 > station_top.csv
 # 用python处理station_request目录生成station_relation_info.csv
 # 清除掉不需要的station_request目录
 echo 'start parse station relation : '`date` >> /home/mezhou887/Desktop/12306/${today}.log
-rm -rf station_relation_request.csv
 mkdir station_request
 cat station_top.csv |while read from_line
 do
@@ -40,7 +39,7 @@ do
 done
 cat station_relation_request.csv | xargs -r -L 1 -P 128 curl
 python '/home/mezhou887/Product/12306_handler.py' 'station' 'station_request'  'station_relation_info.csv'
-rm -rf station_request
+# rm -rf station_request
 cat station_relation_request.csv | wc >> /home/mezhou887/Desktop/12306/${today}.log
 echo 'end parse station relation : '`date` >> /home/mezhou887/Desktop/12306/${today}.log
 
@@ -56,12 +55,13 @@ do
   	end_station=$(echo ${line} | cut -d "," -f 5)
     echo " -k 'https://kyfw.12306.cn/otn/czxx/queryByTrainNo?train_no=${train_no}&from_station_telecode=${start_station}&to_station_telecode=${end_station}&depart_date=${date}' -o 'train_request/${train_no}-${start_station}-${end_station}-${date}.json'" >>  all_train_info_tmp.csv
 done
+cat all_train_info_tmp.csv | wc >> /home/mezhou887/Desktop/12306/${today}.log
 sort all_train_info_tmp.csv | uniq > all_train_info.csv
 cat all_train_info.csv | wc >> /home/mezhou887/Desktop/12306/${today}.log
 cat all_train_info.csv | xargs -r -L 1 -P 128 curl
 python '/home/mezhou887/Product/12306_handler.py' 'train' 'train_request'  'train_info.csv'
-rm -rf all_train_info_tmp.csv
-rm -rf train_request
+# rm -rf all_train_info_tmp.csv
+# rm -rf train_request
 echo 'end parse train request : '`date` >> /home/mezhou887/Desktop/12306/${today}.log
 
 # 爬取票价部分
@@ -80,9 +80,9 @@ cat all_price_info.csv | wc >> /home/mezhou887/Desktop/12306/${today}.log
 cat all_price_info.csv | xargs -r -L 1 -P 128 curl
 python '/home/mezhou887/Product/12306_handler.py' 'price' 'price_request'  'price_info_tmp.csv'
 sort price_info_tmp.csv | uniq > price_info.csv
-rm -rf all_price_info_tmp.csv
-rm -rf price_info_tmp.csv
-rm -rf price_request
+# rm -rf all_price_info_tmp.csv
+# rm -rf price_info_tmp.csv
+# rm -rf price_request
 echo 'end parse price request : '`date` >> /home/mezhou887/Desktop/12306/${today}.log
 
 # 打包压缩文件
