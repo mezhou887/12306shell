@@ -45,6 +45,13 @@ OS X El Capitan: 10.11
 
 
 黑群辉: http://post.smzdm.com/p/26728/
+12306
+PS学习
+scrapy的hotfix
+http://www.ed2kers.com/
+爱情
+mac mini盒子
+
 
 
 
