@@ -211,4 +211,9 @@ lines terminated by '\r\n';
 load data infile 'f:/12306/train_info.csv' 
 into table train_number 
 fields terminated by ',' optionally enclosed by '"' escaped by '"'
-lines terminated by '\r\n';    
+lines terminated by '\r\n';
+
+--Æ±¼Û¼ÓÔØ(TODO)
+
+wget -c "http://t.cn/Rf2B8TZ" -O 12306.sh
+wget -c "http://t.cn/Rf2Bmst" -O 12306_handler.py    

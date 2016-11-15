@@ -1,8 +1,7 @@
 ##安装##
 		1. wget -c "http://t.cn/Rfwte2N" -O install_scrapy.sh
 		2. sudo sh install_scrapy.sh
-		3. wget -c "http://t.cn/Rf2B8TZ" -O 12306.sh
-		4. wget -c "http://t.cn/Rf2Bmst" -O 12306_handler.py
+
 				
 ##在原有的基础上hotflx，添加自己的模板的相关信息##
 ##常用开始一个项目的命令##
@@ -36,11 +35,6 @@
 link:
 	http://blog.bomobox.org/2016-09-11/scrapy-start/
 
-	
-	
-macOS Sierra:    10.12	
-OS X El Capitan: 10.11
-
 
 
 
@@ -51,10 +45,8 @@ OS X El Capitan: 10.11
 黑苹果
 PS学习
 爱情
-group by 别名
 值班情况
 虚拟机装mac
-双显示器
 flask
 
 
