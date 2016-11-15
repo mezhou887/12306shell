@@ -91,7 +91,7 @@ def parse_train(trainsdir, outfile):
     for parent,dirnames,filenames in os.walk(trainsdir):
         for filename in filenames:
             size = os.path.getsize(os.path.join(parent,filename));
-            if size > 100: 
+            if size > 100 and size != 698 and size != 699:  
                 with open(os.path.join(parent,filename), 'r') as f:
                     data = json.load(f);
                     jsonArray = data["data"]["data"];
