@@ -5,6 +5,9 @@ import zipfile
 import sys
 import csv
 import json
+import datetime
+
+now = datetime.datetime.now();
  
 # 将dirname这个目录下的全部文件压缩成zipfilename这个文件 
 def zip_dir(dirname, zipfilename):
@@ -71,13 +74,14 @@ def parse_station(stationsdir, outfile):
                         is_support_card = leftNewDTO["queryLeftNewDTO"]["is_support_card"].encode("utf-8")
                         controlled_train_flag = leftNewDTO["queryLeftNewDTO"]["controlled_train_flag"].encode("utf-8")
                         controlled_train_message = leftNewDTO["queryLeftNewDTO"]["controlled_train_message"].encode("utf-8")
+                          
                         
                         row = [train_no, station_train_code, start_station_telecode, start_station_name, end_station_telecode, 
                                end_station_name, from_station_telecode, from_station_name, to_station_telecode, to_station_name,
                                start_time, arrive_time, day_difference, train_class_name, lishi,
                                canWebBuy, lishiValue, yp_info, control_train_day, start_train_date,
                                seat_feature, yp_ex, train_seat_feature, seat_types, location_code,
-                               from_station_no, to_station_no, control_day, sale_time, is_support_card, controlled_train_flag, controlled_train_message]
+                               from_station_no, to_station_no, control_day, sale_time, is_support_card, controlled_train_flag, controlled_train_message, now.strftime('%Y%m%d%H')]
                         writer.writerow(row)
     csvfile.close()
 
@@ -107,7 +111,7 @@ def parse_train(trainsdir, outfile):
                         station_no = train_data["station_no"]
                         isEnabled = train_data["isEnabled"]
 
-                        row = [train_no, station_train_code, service_type, arrive_time, station_name, start_time, stopover_time, station_no, isEnabled] 
+                        row = [train_no, station_train_code, service_type, arrive_time, station_name, start_time, stopover_time, station_no, isEnabled, now.strftime('%Y%m%d%H')] 
                         writer.writerow(row)
     csvfile.close()
 
@@ -137,7 +141,7 @@ def parse_price(trainsdir, outfile):
                     yz  = price_data.get("A1") #硬座
                     wz  = price_data.get("WZ") #无座
                     train_no = price_data.get("train_no")
-                    row = [swz, ydz, edz, gjrw, rw, yw, yz,wz, train_no]
+                    row = [swz, ydz, edz, gjrw, rw, yw, yz,wz, train_no, now.strftime('%Y%m%d%H')]
                     writer.writerow(row)
     csvfile.close()
 

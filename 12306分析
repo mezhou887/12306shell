@@ -73,7 +73,8 @@ create table station_relation (
   sale_time varchar(200) DEFAULT NULL,
   is_support_card varchar(200) DEFAULT NULL,
   controlled_train_flag varchar(200) DEFAULT NULL,
-  controlled_train_message varchar(200) DEFAULT NULL
+  controlled_train_message varchar(200) DEFAULT NULL,
+  load_time varchar(200)
 );
 alter table station_relation comment='车站编码表';
 
@@ -93,7 +94,8 @@ create table train_number (
   start_time varchar(200) DEFAULT NULL COMMENT '开车时间',
   stopover_time varchar(200) DEFAULT NULL COMMENT '停车分钟',
   station_no varchar(200) DEFAULT NULL COMMENT '站序',
-  isEnabled varchar(200) DEFAULT NULL COMMENT '状态'	
+  isEnabled varchar(200) DEFAULT NULL COMMENT '状态',
+  load_time varchar(200)	
 );
 alter table train_number comment='列车车次表';
 
@@ -103,16 +105,7 @@ fields terminated by ',' optionally enclosed by '"' escaped by '"'
 lines terminated by '\r\n';
 
 
--- 二次加载
-load data infile 'f:/12306/station_relation_info.csv' 
-into table station_relation 
-fields terminated by ',' optionally enclosed by '"' escaped by '"'
-lines terminated by '\r\n';
-
-load data infile 'f:/12306/train_info.csv' 
-into table train_number 
-fields terminated by ',' optionally enclosed by '"' escaped by '"'
-lines terminated by '\r\n';
+-- 列车票价(TODO)
 
 
 -- 查询
@@ -207,3 +200,15 @@ SELECT distinct a.train_no,
     a.end_station_name
 FROM
     `12306`.train_detail_info_02 a;   
+    
+    
+-- 二次加载
+load data infile 'f:/12306/station_relation_info.csv' 
+into table station_relation 
+fields terminated by ',' optionally enclosed by '"' escaped by '"'
+lines terminated by '\r\n';
+
+load data infile 'f:/12306/train_info.csv' 
+into table train_number 
+fields terminated by ',' optionally enclosed by '"' escaped by '"'
+lines terminated by '\r\n';    

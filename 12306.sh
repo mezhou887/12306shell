@@ -18,8 +18,12 @@ echo ${result} | cut -d "'" -f 2 | tr "@" "\n" | tr "|" "," | sed -e '/^$/d' > a
 # sort -R all_station.csv | head -60 > station_top.csv
 
 # 按顺序取用下面的
-head -5 all_station.csv > station_top.csv
+# head -5 all_station.csv > station_top.csv
 
+# 取前300名车站中的任意60名数据
+head -300 all_station.csv | sort -R | head -60 > station_top.csv
+
+sleep 100
 
 # 生成车站之间的关系请求表: station_relation_request.csv
 # 在station_request目录下存放所有请求的结果
@@ -37,10 +41,12 @@ do
 		echo " -k 'https://kyfw.12306.cn/otn/leftTicket/queryX?leftTicketDTO.train_date=${date}&leftTicketDTO.from_station=${from_station}&leftTicketDTO.to_station=${to_station}&purpose_codes=ADULT' -o 'station_request/${from_station}${to_station}${date}.json'" >>  station_relation_request.csv
 	done
 done
-cat station_relation_request.csv | xargs -r -L 1 -P 128 curl
+cat station_relation_request.csv | xargs -r -L 1 -P 64 curl
 python '/home/mezhou887/Product/12306_handler.py' 'station' 'station_request'  'station_relation_info.csv'
 cat station_relation_request.csv | wc >> /home/mezhou887/Desktop/12306/${today}.log
 echo 'end parse station relation : '`date` >> /home/mezhou887/Desktop/12306/${today}.log
+
+sleep 100
 
 # 在train_request目录下存放所有的请求
 # 将请求排序后去重生成all_train_info.csv
@@ -56,9 +62,11 @@ do
 done
 sort all_train_info_tmp.csv | uniq > all_train_info.csv
 cat all_train_info.csv | wc >> /home/mezhou887/Desktop/12306/${today}.log
-cat all_train_info.csv | xargs -r -L 1 -P 128 curl
+cat all_train_info.csv | xargs -r -L 1 -P 64 curl
 python '/home/mezhou887/Product/12306_handler.py' 'train' 'train_request'  'train_info.csv'
 echo 'end parse train request : '`date` >> /home/mezhou887/Desktop/12306/${today}.log
+
+sleep 100
 
 # 爬取票价部分
 echo 'start parse price request : '`date` >> /home/mezhou887/Desktop/12306/${today}.log
@@ -73,10 +81,12 @@ do
 done
 sort all_price_info_tmp.csv | uniq > all_price_info.csv
 cat all_price_info.csv | wc >> /home/mezhou887/Desktop/12306/${today}.log
-cat all_price_info.csv | xargs -r -L 1 -P 128 curl
+cat all_price_info.csv | xargs -r -L 1 -P 64 curl
 python '/home/mezhou887/Product/12306_handler.py' 'price' 'price_request'  'price_info_tmp.csv'
 sort price_info_tmp.csv | uniq > price_info.csv
 echo 'end parse price request : '`date` >> /home/mezhou887/Desktop/12306/${today}.log
+
+sleep 10
 
 # 打包压缩文件
 cd /home/mezhou887/Desktop
