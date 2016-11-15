@@ -21,9 +21,9 @@ echo ${result} | cut -d "'" -f 2 | tr "@" "\n" | tr "|" "," | sed -e '/^$/d' > a
 # head -5 all_station.csv > station_top.csv
 
 # 取前300名车站中的任意60名数据
-head -300 all_station.csv | sort -R | head -60 > station_top.csv
+head -300 all_station.csv | sort -R | head -6 > station_top.csv
 
-sleep 100
+sleep 10
 
 # 生成车站之间的关系请求表: station_relation_request.csv
 # 在station_request目录下存放所有请求的结果
@@ -93,7 +93,7 @@ cd /home/mezhou887/Desktop
 python '/home/mezhou887/Product/12306_handler.py' 'zip' ${today} '12306/'${today2}'.zip'
 
 # 同步到百度云
-cd 12306
-bypy.py upload
+# cd 12306
+# bypy.py upload
 
 echo 'end: '`date` >> /home/mezhou887/Desktop/12306/${today}.log
