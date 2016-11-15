@@ -20,8 +20,8 @@ echo ${result} | cut -d "'" -f 2 | tr "@" "\n" | tr "|" "," | sed -e '/^$/d' > a
 # 按顺序取用下面的
 # head -5 all_station.csv > station_top.csv
 
-# 取前300名车站中的任意60名数据
-head -300 all_station.csv | sort -R | head -6 > station_top.csv
+# 取前300名车站中的任意50名数据
+head -300 all_station.csv | sort -R | head -50 > station_top.csv
 
 sleep 10
 
