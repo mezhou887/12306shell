@@ -90,7 +90,6 @@ public class TrainClient {
         return map;
     }    
 	
-
 	public String getTrainList() {
 		try {
 			CloseableHttpClient httpclient = getHttpClient();
@@ -188,9 +187,15 @@ public class TrainClient {
 		return requestLines;
 	}
 
-	private static void queryTrains(List<String> requestLines, BufferedOutputStream buff) {
+	private static void queryTrains(List<String> requestLines, BufferedOutputStream buff) throws IOException {
 		for(String requestLine: requestLines) {
-			queryByTrainNo(requestLine, buff);
+			try {
+				queryByTrainNo(requestLine, buff);
+			} catch (Exception e) {
+				e.printStackTrace();
+				buff.flush();
+			}
+			
 		}
 		
 	}
@@ -202,43 +207,36 @@ public class TrainClient {
 		return element.getAsString();
 	}
 	
-	public static void queryByTrainNo(String url, BufferedOutputStream buff) {
-		try {
-			CloseableHttpClient httpclient = getHttpClient();
-			HttpGet httpGet = new HttpGet(url);
-			HttpResponse response = httpclient.execute(httpGet);
-			Map<String, Object> map = readHttpResponse(response);
-			String content = map.get("content").toString();
-			JsonParser parse =new JsonParser();
-			JsonObject json = (JsonObject) parse.parse(content);
-			JsonElement dataEle = json.get("data").getAsJsonObject().get("data");
-			JsonArray array = dataEle.getAsJsonArray();
-			for(JsonElement element: array) {
-				JsonObject trainObj = element.getAsJsonObject();
-				String startStationName = trimToEmpty(trainObj.get("start_station_name"));
-				String arriveTime = trimToEmpty(trainObj.get("arrive_time"));
-				String stationTrainCode = trimToEmpty(trainObj.get("station_train_code"));
-				String stationName = trimToEmpty(trainObj.get("station_name"));
-				String trainClassName = trimToEmpty(trainObj.get("train_class_name"));
-				String serviceType = trimToEmpty(trainObj.get("service_type"));
-				String startTime = trimToEmpty(trainObj.get("start_time"));
-				String stopoverTime = trimToEmpty(trainObj.get("stopover_time"));
-				String end_stationName = trimToEmpty(trainObj.get("end_station_name"));
-				String stationNo = trimToEmpty(trainObj.get("station_no"));
-				String isEnabled = trimToEmpty(trainObj.get("isEnabled"));	
-				Map<String, String> mapRequest = CRequest.URLRequest(url);
-				String line = currentDate + "," + url + "," + mapRequest.get("train_no") + "," + mapRequest.get("from_station_telecode") + "," + mapRequest.get("to_station_telecode") + "," + mapRequest.get("depart_date") + "," + startStationName + "," + arriveTime + "," + stationTrainCode + "," + stationName + "," + trainClassName + "," + serviceType + "," + startTime + "," + stopoverTime + "," + end_stationName + "," + stationNo + "," + isEnabled + "\r\n";
-				buff.write(line.getBytes());
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
+	public static void queryByTrainNo(String url, BufferedOutputStream buff) throws Exception {
+		CloseableHttpClient httpclient = getHttpClient();
+		HttpGet httpGet = new HttpGet(url);
+		HttpResponse response = httpclient.execute(httpGet);
+		Map<String, Object> map = readHttpResponse(response);
+		String content = map.get("content").toString();
+		JsonParser parse =new JsonParser();
+		JsonObject json = (JsonObject) parse.parse(content);
+		JsonElement dataEle = json.get("data").getAsJsonObject().get("data");
+		JsonArray array = dataEle.getAsJsonArray();
+		for(JsonElement element: array) {
+			JsonObject trainObj = element.getAsJsonObject();
+			String startStationName = trimToEmpty(trainObj.get("start_station_name"));
+			String arriveTime = trimToEmpty(trainObj.get("arrive_time"));
+			String stationTrainCode = trimToEmpty(trainObj.get("station_train_code"));
+			String stationName = trimToEmpty(trainObj.get("station_name"));
+			String trainClassName = trimToEmpty(trainObj.get("train_class_name"));
+			String serviceType = trimToEmpty(trainObj.get("service_type"));
+			String startTime = trimToEmpty(trainObj.get("start_time"));
+			String stopoverTime = trimToEmpty(trainObj.get("stopover_time"));
+			String end_stationName = trimToEmpty(trainObj.get("end_station_name"));
+			String stationNo = trimToEmpty(trainObj.get("station_no"));
+			String isEnabled = trimToEmpty(trainObj.get("isEnabled"));	
+			Map<String, String> mapRequest = CRequest.URLRequest(url);
+			String line = currentDate + "," + url + "," + mapRequest.get("train_no") + "," + mapRequest.get("from_station_telecode") + "," + mapRequest.get("to_station_telecode") + "," + mapRequest.get("depart_date") + "," + startStationName + "," + arriveTime + "," + stationTrainCode + "," + stationName + "," + trainClassName + "," + serviceType + "," + startTime + "," + stopoverTime + "," + end_stationName + "," + stationNo + "," + isEnabled + "\r\n";
+			buff.write(line.getBytes());
 		}
 	}
-	
 
-	
-	public static void main(String[] args) throws IOException{
+	public static void main(String[] args) throws IOException {
 		TrainClient client = new TrainClient();
 		String trainList = client.getTrainList();
 		Map<String, String> stationMap = client.getAllStationName();
@@ -246,9 +244,58 @@ public class TrainClient {
 		BufferedOutputStream buff = new BufferedOutputStream(new FileOutputStream(new File("D:/trainno_list_" + date.getTime() + ".csv")));
 		queryTrains(requestLines, buff);
 		buff.flush();
-		buff.close();
+		buff.close();			
 	}
 
+}
 
+class CRequest {
+
+	private static String TruncateUrlPage(String strURL) {
+		String strAllParam = null;
+		String[] arrSplit = null;
+
+		strURL = strURL.trim().toLowerCase();
+
+		arrSplit = strURL.split("[?]");
+		if (strURL.length() > 1) {
+			if (arrSplit.length > 1) {
+				if (arrSplit[1] != null) {
+					strAllParam = arrSplit[1];
+				}
+			}
+		}
+
+		return strAllParam;
+	}
+
+	public static Map<String, String> URLRequest(String URL) {
+		Map<String, String> mapRequest = new HashMap<String, String>();
+
+		String[] arrSplit = null;
+
+		String strUrlParam = TruncateUrlPage(URL);
+		if (strUrlParam == null) {
+			return mapRequest;
+		}
+
+		arrSplit = strUrlParam.split("[&]");
+		for (String strSplit : arrSplit) {
+			String[] arrSplitEqual = null;
+			arrSplitEqual = strSplit.split("[=]");
+
+			if (arrSplitEqual.length > 1) {
+
+				mapRequest.put(arrSplitEqual[0], arrSplitEqual[1]);
+
+			} else {
+				if (arrSplitEqual[0] != "") {
+
+					mapRequest.put(arrSplitEqual[0], "");
+				}
+			}
+		}
+		return mapRequest;
+	}
 
 }
