@@ -45,6 +45,7 @@ public class TrainClient {
     private static SSLContextBuilder builder = null;
     private static Date date = new Date();
     private static String currentDate;
+    private static String filetime;
 	
 	static {
         try {
@@ -64,6 +65,7 @@ public class TrainClient {
             cm = new PoolingHttpClientConnectionManager(registry);
             cm.setMaxTotal(200);//max connection
             currentDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+            filetime = new SimpleDateFormat("yyyyMMddHH").format(date);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -141,7 +143,7 @@ public class TrainClient {
 	public List<String> parseTrainJson(String content, Map<String, String> stationMap){
 		List<String> requestLines = new ArrayList<String>();
 		try {
-			BufferedOutputStream buff = new BufferedOutputStream(new FileOutputStream(new File("D:/train_list_" + date.getTime() + ".csv")));
+			BufferedOutputStream buff = new BufferedOutputStream(new FileOutputStream(new File("D:/train_list_" + filetime + ".csv")));
 			JsonParser parse =new JsonParser();
 			JsonObject json = (JsonObject) parse.parse(content);
 			String maxDate = "";
@@ -241,7 +243,7 @@ public class TrainClient {
 		String trainList = client.getTrainList();
 		Map<String, String> stationMap = client.getAllStationName();
 		List<String> requestLines = client.parseTrainJson(trainList, stationMap);	
-		BufferedOutputStream buff = new BufferedOutputStream(new FileOutputStream(new File("D:/trainno_list_" + date.getTime() + ".csv")));
+		BufferedOutputStream buff = new BufferedOutputStream(new FileOutputStream(new File("D:/trainno_list_" + filetime + ".csv")));
 		queryTrains(requestLines, buff);
 		buff.flush();
 		buff.close();			
