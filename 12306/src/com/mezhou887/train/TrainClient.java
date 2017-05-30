@@ -194,7 +194,7 @@ public class TrainClient {
 			try {
 				queryByTrainNo(requestLine, buff);
 			} catch (Exception e) {
-				e.printStackTrace();
+				System.out.println(requestLine); //上海南到金山卫的车买不了
 				buff.flush();
 			}
 			
