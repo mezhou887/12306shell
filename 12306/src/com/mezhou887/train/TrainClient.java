@@ -143,7 +143,7 @@ public class TrainClient {
 	public List<String> parseTrainJson(String content, Map<String, String> stationMap){
 		List<String> requestLines = new ArrayList<String>();
 		try {
-			BufferedOutputStream buff = new BufferedOutputStream(new FileOutputStream(new File("D:/train_list_" + filetime + ".csv")));
+			BufferedOutputStream buff = new BufferedOutputStream(new FileOutputStream(new File("train_list_" + filetime + ".csv")));
 			JsonParser parse =new JsonParser();
 			JsonObject json = (JsonObject) parse.parse(content);
 			String maxDate = "";
@@ -243,7 +243,7 @@ public class TrainClient {
 		String trainList = client.getTrainList();
 		Map<String, String> stationMap = client.getAllStationName();
 		List<String> requestLines = client.parseTrainJson(trainList, stationMap);	
-		BufferedOutputStream buff = new BufferedOutputStream(new FileOutputStream(new File("D:/trainno_list_" + filetime + ".csv")));
+		BufferedOutputStream buff = new BufferedOutputStream(new FileOutputStream(new File("trainno_list_" + filetime + ".csv")));
 		queryTrains(requestLines, buff);
 		buff.flush();
 		buff.close();			
