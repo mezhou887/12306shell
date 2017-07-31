@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,6 +47,10 @@ public class TrainClient {
     private static Date date = new Date();
     private static String currentDate;
     private static String filetime;
+    private static String station_name_url = "https://kyfw.12306.cn/otn/resources/js/framework/station_name.js?station_version=1.9002";
+    private static String favorite_name_url = "https://kyfw.12306.cn/otn/resources/js/framework/favorite_name.js";
+    private static String train_list_url = "https://kyfw.12306.cn/otn/resources/js/query/train_list.js?scriptVersion=1.0";
+    private static String query_train_url = "https://kyfw.12306.cn/otn/czxx/queryByTrainNo?train_no={0}&from_station_telecode={1}&to_station_telecode={2}&depart_date={3}";
 	
 	static {
         try {
@@ -95,7 +100,7 @@ public class TrainClient {
 	public String getTrainList() {
 		try {
 			CloseableHttpClient httpclient = getHttpClient();
-			HttpGet httpGet = new HttpGet("https://kyfw.12306.cn/otn/resources/js/query/train_list.js?scriptVersion=1.0");
+			HttpGet httpGet = new HttpGet(train_list_url);
 			HttpResponse response = httpclient.execute(httpGet);
 			Map<String, Object> map = readHttpResponse(response);
 			String content = map.get("content").toString().substring(16);
@@ -107,13 +112,11 @@ public class TrainClient {
 	}
 	
 	public  Map<String, String> getAllStationName() {
-		String url = "https://kyfw.12306.cn/otn/resources/js/framework/station_name.js?station_version=1.9002";
-		return getStationName(url,20);
+		return getStationName(station_name_url,20);
 	}
 	
 	public  Map<String, String> getFavoriteStationName() {
-		String url = "https://kyfw.12306.cn/otn/resources/js/framework/favorite_name.js";
-		return getStationName(url,22);
+		return getStationName(favorite_name_url,22);
 	}	
 	
 	private Map<String, String> getStationName(String url,int distinct) {
@@ -173,8 +176,7 @@ public class TrainClient {
 						String line = currentDate + "," + trainDate + "," + trainNo + "," + trainCode + "," + startStationName + "," + startStationCode + "," + endStationName + "," + endStationCode +"\r\n";
 						buff.write(line.getBytes());
 						if(maxDate.equals(trainDate)) {
-							String requestLine = "https://kyfw.12306.cn/otn/czxx/queryByTrainNo?train_no=" + trainNo + "&from_station_telecode=" + startStationCode + "&to_station_telecode=" + endStationCode + "&depart_date="+trainDate;							
-							requestLines.add(requestLine);
+							requestLines.add(MessageFormat.format(query_train_url, trainNo, startStationCode, endStationCode, trainDate));
 						}
 
 					}
@@ -194,7 +196,6 @@ public class TrainClient {
 			try {
 				queryByTrainNo(requestLine, buff);
 			} catch (Exception e) {
-				System.out.println(requestLine); //上海南到金山卫的车买不了
 				buff.flush();
 			}
 			
