@@ -31,5 +31,5 @@ CREATE TABLE `train_12306`.`trainno_list` (
   `isEnabled` VARCHAR(45) NOT NULL     
 );
 
-load data local infile 'd:\\train_list_1496111234692.csv' into table train_12306.train_list CHARACTER SET gbk fields terminated by ',' lines terminated by '\r\n';
-load data local infile 'd:\\trainno_list_1496111234692.csv' into table train_12306.trainno_list CHARACTER SET gbk fields terminated by ',' lines terminated by '\r\n';
+load data local infile 'train_list_1496111234692.csv' into table train_12306.train_list CHARACTER SET gbk fields terminated by ',' lines terminated by '\r\n';
+load data local infile 'trainno_list_1496111234692.csv' into table train_12306.trainno_list CHARACTER SET gbk fields terminated by ',' lines terminated by '\r\n';

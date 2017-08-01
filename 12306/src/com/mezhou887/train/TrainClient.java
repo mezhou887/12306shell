@@ -70,7 +70,7 @@ public class TrainClient {
             cm = new PoolingHttpClientConnectionManager(registry);
             cm.setMaxTotal(200);//max connection
             currentDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
-            filetime = new SimpleDateFormat("yyyyMMddHH").format(date);
+            filetime = new SimpleDateFormat("yyyy_MM_dd_HH").format(date);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -97,6 +97,7 @@ public class TrainClient {
         return map;
     }    
 	
+    // 获取所有的车次内容
 	public String getTrainList() {
 		try {
 			CloseableHttpClient httpclient = getHttpClient();
@@ -111,6 +112,7 @@ public class TrainClient {
 		}
 	}
 	
+	// 获取所有的车站名称和编码
 	public  Map<String, String> getAllStationName() {
 		return getStationName(station_name_url,20);
 	}
@@ -178,9 +180,7 @@ public class TrainClient {
 						if(maxDate.equals(trainDate)) {
 							requestLines.add(MessageFormat.format(query_train_url, trainNo, startStationCode, endStationCode, trainDate));
 						}
-
 					}
-					
 				}
 			}
 			buff.flush();
@@ -210,6 +210,7 @@ public class TrainClient {
 		return element.getAsString();
 	}
 	
+	// 根据车次查询途径站点
 	public static void queryByTrainNo(String url, BufferedOutputStream buff) throws Exception {
 		CloseableHttpClient httpclient = getHttpClient();
 		HttpGet httpGet = new HttpGet(url);
