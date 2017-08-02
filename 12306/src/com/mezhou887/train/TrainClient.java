@@ -240,16 +240,27 @@ public class TrainClient {
 		}
 	}
 
+	public static void saveFile(String fileName, Map<String, String> content) throws IOException {
+		BufferedOutputStream buff = new BufferedOutputStream(new FileOutputStream(new File(fileName + "_" + filetime + ".csv")));
+		for (Map.Entry<String, String> m :content.entrySet())  {  
+			buff.write(m.getValue().getBytes());			
+		} 
+		buff.flush();
+		buff.close();			
+	}
+
 	public static void main(String[] args) throws IOException {
 		TrainClient client = new TrainClient();
 		String trainList = client.getTrainList();
 		Map<String, String> stationMap = client.getAllStationName();
+		saveFile("all_station", stationMap);
 		List<String> requestLines = client.parseTrainJson(trainList, stationMap);	
 		BufferedOutputStream buff = new BufferedOutputStream(new FileOutputStream(new File("trainno_list_" + filetime + ".csv")));
 		queryTrains(requestLines, buff);
 		buff.flush();
 		buff.close();			
 	}
+	
 
 }
 

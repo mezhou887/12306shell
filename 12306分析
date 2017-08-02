@@ -1,28 +1,8 @@
 数据库名称: 12306
 
-并发数记录
-设置为128个并发，爬取256个车站之间的数据
-需要耗时:
-
-
-以上海到天津的为例
-
-爬取车站之间的信息API
-https://kyfw.12306.cn/otn/leftTicket/queryX?leftTicketDTO.train_date=2016-11-06&leftTicketDTO.from_station=SHH&leftTicketDTO.to_station=TJP&purpose_codes=ADULT
-
-爬取车次信息的API
-https://kyfw.12306.cn/otn/czxx/queryByTrainNo?train_no=5l0000G21230&from_station_telecode=AOH&to_station_telecode=TXP&depart_date=2016-11-06
-站序 站名 到达时间 出发时间 停留时间
-
-爬取票价的API
-https://kyfw.12306.cn/otn/leftTicket/queryTicketPrice?train_no=5l0000G21230&from_station_no=01&to_station_no=10&seat_types=OM9&train_date=2016-11-06
-
-https://kyfw.12306.cn/otn/leftTicket/queryTicketPrice?train_no=5l0000G21230&from_station_no=01&to_station_no=10&train_date=2016-11-06
-
-
 数据库设计:
--- 车站编码表
 
+-- 1. 车站编码表
 drop table station;
 create table station (
 	shortname1 varchar(20) not null COMMENT '车站简称1',
@@ -38,6 +18,7 @@ load data infile 'f:/12306/all_station.csv'
 into table station 
 fields terminated by ',' optionally enclosed by '"' escaped by '"'
 lines terminated by '\n';
+
 
 -- 车站关系表
 drop table station_relation;
