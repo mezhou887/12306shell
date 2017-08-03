@@ -29,10 +29,10 @@ https://kyfw.12306.cn/otn/leftTicket/queryTicketPrice?train_no={0}&from_station_
 http://dynamic.12306.cn/otn/board/query
 
 5. 
-https://kyfw.12306.cn/otn/resources/js/query/train_list.js?scriptVersion=1.5462
+https://kyfw.12306.cn/otn/resources/js/query/train_list.js
 {"station_train_code":"D1(北京-沈阳)","train_no":"24000000D10R"}
 
 6. 爬取车站编码信息
-https://kyfw.12306.cn/otn/resources/js/framework/station_name.js?station_version=1.8970
+https://kyfw.12306.cn/otn/resources/js/framework/station_name.js
 
 
