@@ -14,25 +14,25 @@ TJP	天津
 1. 爬取车站之间的信息
 https://kyfw.12306.cn/otn/leftTicket/query?leftTicketDTO.train_date={0}&leftTicketDTO.from_station={1}&leftTicketDTO.to_station={2}&purpose_codes=ADULT
 范例: https://kyfw.12306.cn/otn/leftTicket/query?leftTicketDTO.train_date=2017-08-30&leftTicketDTO.from_station=SHH&leftTicketDTO.to_station=TJP&purpose_codes=ADULT
-
+结果范例:
 
 2. 爬取车次信息
 https://kyfw.12306.cn/otn/czxx/queryByTrainNo?train_no={0}&from_station_telecode={1}&to_station_telecode={2}&depart_date={3}
 范例: https://kyfw.12306.cn/otn/czxx/queryByTrainNo?train_no=5l0000G10261&from_station_telecode=AOH&to_station_telecode=VNP&depart_date=2017-08-30
-
+结果范例:
 
 3. 爬取票价信息 seat_types有OM9,14163,OO4，1413
 https://kyfw.12306.cn/otn/leftTicket/queryTicketPrice?train_no={0}&from_station_no={1}&to_station_no={2}&seat_types={3}&train_date={4}
 范例: https://kyfw.12306.cn/otn/leftTicket/queryTicketPrice?train_no=5l0000G21230&from_station_no=01&to_station_no=10&seat_types=OM9&train_date=2017-08-30
+结果范例:
 
-4. 查询余票张数(余票张数为全部席别的总数（30分钟更新一次，上次更新时间：21:01）)
-http://dynamic.12306.cn/otn/board/query
-
-5. 
+4. 
 https://kyfw.12306.cn/otn/resources/js/query/train_list.js
+范例:
 {"station_train_code":"D1(北京-沈阳)","train_no":"24000000D10R"}
+结果范例:
 
-6. 爬取车站编码信息
+5. 爬取车站编码信息
 https://kyfw.12306.cn/otn/resources/js/framework/station_name.js
-
-
+范例:
+结果范例:
