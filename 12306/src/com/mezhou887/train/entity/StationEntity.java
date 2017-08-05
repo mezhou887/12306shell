@@ -2,12 +2,12 @@ package com.mezhou887.train.entity;
 
 public class StationEntity {
 	
-	private String shortname1; //³µÕ¾¼ò³Æ1
-	private String name;       //³µÕ¾Ãû³Æ
-	private String code_id;    //³µÕ¾±àÂë
-	private String fullname;   //³µÕ¾Æ´ÒôÈ«³Æ
-	private String shortname2; //³µÕ¾¼ò³Æ2
-	private String no;         //ÐòºÅ 
+	private String shortname1 = ""; //³µÕ¾¼ò³Æ1
+	private String name = "";       //³µÕ¾Ãû³Æ
+	private String code_id = "";    //³µÕ¾±àÂë
+	private String fullname = "";   //³µÕ¾Æ´ÒôÈ«³Æ
+	private String shortname2 = ""; //³µÕ¾¼ò³Æ2
+	private String no = "";         //ÐòºÅ 
 	
 
 	public StationEntity(String shortname1, String name, String code_id, String fullname, String shortname2, String no) {
@@ -55,6 +55,11 @@ public class StationEntity {
 	public void setNo(String no) {
 		this.no = no;
 	}
+	
+	public String clover2Line() {
+		return shortname1 + "," + name + "," + code_id + "," + fullname + "," + shortname2 + "," + no +"\r\n";
+	}
+	
 	@Override
 	public String toString() {
 		return "StationEntity [shortname1=" + shortname1 + ", name=" + name + ", code_id=" + code_id + ", fullname="

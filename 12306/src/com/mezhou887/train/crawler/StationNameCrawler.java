@@ -1,16 +1,22 @@
 package com.mezhou887.train.crawler;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
+import java.util.Map.Entry;
 
 import com.mezhou887.train.BaseCrawler;
 import com.mezhou887.train.entity.StationEntity;
+import com.mezhou887.train.util.CrawlerUtils;
 
 public class StationNameCrawler extends BaseCrawler {
 	
     private String station_name_url = "https://kyfw.12306.cn/otn/resources/js/framework/station_name.js";
+    private String fileName = "all_station_name";
     
 	/**
 	 * 获取到全国所有车站的名称
@@ -48,7 +54,36 @@ public class StationNameCrawler extends BaseCrawler {
 	}
 
 	@Override
-	public void saveData() {
+	public void saveCSVFile(Object o) {
+		BufferedOutputStream buff = null;
+		try {
+			buff = new BufferedOutputStream(new FileOutputStream(new File(fileName + "_" + CrawlerUtils.filetime + ".csv")));
+			Map<String, StationEntity> map = (Map<String, StationEntity>)o;
+			for (Entry<String, StationEntity> m :map.entrySet())  {
+				StationEntity entity = m.getValue();
+				buff.write(entity.clover2Line().getBytes());			
+			} 
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if(buff != null) {
+				try {
+					buff.flush();
+					buff.close();					
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		
+		
+	}
+
+	@Override
+	public void saveDatabase() {
 		// TODO Auto-generated method stub
 		
 	}	

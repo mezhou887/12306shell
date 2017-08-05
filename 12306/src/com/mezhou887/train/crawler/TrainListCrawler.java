@@ -12,16 +12,15 @@ import com.google.gson.JsonParser;
 import com.mezhou887.train.BaseCrawler;
 import com.mezhou887.train.entity.StationEntity;
 import com.mezhou887.train.entity.TrainEntity;
+import com.mezhou887.train.util.CrawlerUtils;
 
 public class TrainListCrawler extends BaseCrawler {
 
 	private String train_list_url = "https://kyfw.12306.cn/otn/resources/js/query/train_list.js";
-	private String executeDate;
 	
 	
-    public TrainListCrawler(String executeDate) {
+    public TrainListCrawler() {
 		super();
-		this.executeDate = executeDate;
     }
 
     /**
@@ -68,7 +67,7 @@ public class TrainListCrawler extends BaseCrawler {
 					if(stationMap.containsKey(endStationName)) {
 						endStationCode = stationMap.get(endStationName).getCode_id();						
 					}
-					TrainEntity entity = new TrainEntity(executeDate, trainDate, trainNo, trainCode, 
+					TrainEntity entity = new TrainEntity(CrawlerUtils.executeDate, trainDate, trainNo, trainCode, 
 									startStationName, startStationCode, endStationName, endStationCode);
 					results.add(entity);
 				}
@@ -78,7 +77,13 @@ public class TrainListCrawler extends BaseCrawler {
 	}
 
 	@Override
-	public void saveData() {
+	public void saveCSVFile(Object o) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void saveDatabase() {
 		// TODO Auto-generated method stub
 		
 	}

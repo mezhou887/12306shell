@@ -77,8 +77,8 @@ public abstract class BaseCrawler {
 		return element.getAsString();
 	}
 	
-	public abstract void saveData();
+	public abstract void saveCSVFile(Object o);
     
-     
+	public abstract void saveDatabase(); 
 	
 }

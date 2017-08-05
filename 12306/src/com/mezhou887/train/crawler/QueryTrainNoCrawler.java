@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.http.client.ClientProtocolException;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -16,17 +14,16 @@ import com.mezhou887.train.BaseCrawler;
 import com.mezhou887.train.entity.TrainEntity;
 import com.mezhou887.train.entity.TrainNoEntity;
 import com.mezhou887.train.util.CRequest;
+import com.mezhou887.train.util.CrawlerUtils;
 
 public class QueryTrainNoCrawler extends BaseCrawler {
 	
 	private String query_train_url = "https://kyfw.12306.cn/otn/czxx/queryByTrainNo?train_no={0}&from_station_telecode={1}&to_station_telecode={2}&depart_date={3}";
-	private String executeDate;
 	private TrainEntity e;
 	
-    public QueryTrainNoCrawler(TrainEntity e, String executeDate) {
+    public QueryTrainNoCrawler(TrainEntity e) {
 		super();
 		this.e = e;
-		this.executeDate = executeDate;
 	}
 
 	/**
@@ -61,7 +58,7 @@ public class QueryTrainNoCrawler extends BaseCrawler {
 				String toStationTelecode = mapRequest.get("to_station_telecode");
 				String departDate = mapRequest.get("depart_date");
 				
-				TrainNoEntity entity = new TrainNoEntity(executeDate, startStationName, arriveTime, stationTrainCode, stationName, trainClassName, serviceType, startTime, 
+				TrainNoEntity entity = new TrainNoEntity(CrawlerUtils.executeDate, startStationName, arriveTime, stationTrainCode, stationName, trainClassName, serviceType, startTime, 
 						stopoverTime, endStationName, stationNo, isEnabled, trainNo, fromStationTelecode, toStationTelecode,departDate);
 				lines.add(entity);
 			}
@@ -72,7 +69,13 @@ public class QueryTrainNoCrawler extends BaseCrawler {
 	}
 
 	@Override
-	public void saveData() {
+	public void saveCSVFile(Object o) {
+		
+	}
+
+	@Override
+	public void saveDatabase() {
+		// TODO Auto-generated method stub
 		
 	}
 	
