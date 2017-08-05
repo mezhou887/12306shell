@@ -14,6 +14,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mezhou887.train.BaseCrawler;
 import com.mezhou887.train.entity.TrainEntity;
+import com.mezhou887.train.entity.TrainNoEntity;
 import com.mezhou887.train.util.CRequest;
 
 public class QueryTrainNoCrawler extends BaseCrawler {
@@ -31,9 +32,9 @@ public class QueryTrainNoCrawler extends BaseCrawler {
 	/**
      * 获取所有的车次内容
      */
-	public List<String> queryByTrainNo() {
+	public List<TrainNoEntity> queryByTrainNo() {
 		String url = MessageFormat.format(query_train_url, e.getTrainNo(), e.getStartStationCode(), e.getEndStationCode(), e.getTrainDate());
-		List<String> lines = new ArrayList<String>();
+		List<TrainNoEntity> lines = new ArrayList<TrainNoEntity>();
 		try {
 			Map<String, Object> map = getHttpResponse(url);
 			String content = map.get("content").toString();
@@ -43,6 +44,7 @@ public class QueryTrainNoCrawler extends BaseCrawler {
 			JsonArray array = dataEle.getAsJsonArray();
 			for(JsonElement element: array) {
 				JsonObject trainObj = element.getAsJsonObject();
+				Map<String, String> mapRequest = CRequest.URLRequest(url);
 				String startStationName = trimToEmpty(trainObj.get("start_station_name"));
 				String arriveTime = trimToEmpty(trainObj.get("arrive_time"));
 				String stationTrainCode = trimToEmpty(trainObj.get("station_train_code"));
@@ -51,15 +53,17 @@ public class QueryTrainNoCrawler extends BaseCrawler {
 				String serviceType = trimToEmpty(trainObj.get("service_type"));
 				String startTime = trimToEmpty(trainObj.get("start_time"));
 				String stopoverTime = trimToEmpty(trainObj.get("stopover_time"));
-				String end_stationName = trimToEmpty(trainObj.get("end_station_name"));
+				String endStationName = trimToEmpty(trainObj.get("end_station_name"));
 				String stationNo = trimToEmpty(trainObj.get("station_no"));
 				String isEnabled = trimToEmpty(trainObj.get("isEnabled"));	
-				Map<String, String> mapRequest = CRequest.URLRequest(url);
-				String line = executeDate + "," + url + "," + mapRequest.get("train_no") + "," + mapRequest.get("from_station_telecode") + "," 
-						+ mapRequest.get("to_station_telecode") + "," + mapRequest.get("depart_date") + "," + startStationName + "," 
-						+ arriveTime + "," + stationTrainCode + "," + stationName + "," + trainClassName + "," + serviceType + "," 
-						+ startTime + "," + stopoverTime + "," + end_stationName + "," + stationNo + "," + isEnabled + "\r\n";
-				lines.add(line);
+				String trainNo = mapRequest.get("train_no");
+				String fromStationTelecode = mapRequest.get("from_station_telecode");
+				String toStationTelecode = mapRequest.get("to_station_telecode");
+				String departDate = mapRequest.get("depart_date");
+				
+				TrainNoEntity entity = new TrainNoEntity(executeDate, startStationName, arriveTime, stationTrainCode, stationName, trainClassName, serviceType, startTime, 
+						stopoverTime, endStationName, stationNo, isEnabled, trainNo, fromStationTelecode, toStationTelecode,departDate);
+				lines.add(entity);
 			}
 		}catch (IOException e) {
 			e.printStackTrace();
