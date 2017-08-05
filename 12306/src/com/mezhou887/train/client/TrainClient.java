@@ -25,7 +25,7 @@ public class TrainClient {
 		
 		for(TrainEntity entity: trainEntitys){
 			QueryTrainNoCrawler qtCrawler = new QueryTrainNoCrawler(entity, executeDate);
-			System.out.println(qtCrawler.getTrainNo());
+			System.out.println(qtCrawler.queryByTrainNo().get(1));
 			break;
 		}
 		
