@@ -2,22 +2,22 @@ package com.mezhou887.train.entity;
 
 public class TrainNoEntity {
 	
-	private String executeDate;  	 // 执行时间
-	private String startStationName;
-	private String arriveTime;
-	private String stationTrainCode;
-	private String stationName;
-	private String trainClassName;
-	private String serviceType;
-	private String startTime;
-	private String stopoverTime;
-	private String endStationName;
-	private String stationNo;
-	private String isEnabled;	
-	private String trainNo;
-	private String fromStationTelecode;
-	private String toStationTelecode;
-	private String departDate;
+	private String executeDate = "";  	 // 执行时间
+	private String startStationName = "";
+	private String arriveTime = "";
+	private String stationTrainCode = "";
+	private String stationName = "";
+	private String trainClassName = "";
+	private String serviceType = "";
+	private String startTime = "";
+	private String stopoverTime = "";
+	private String endStationName = "";
+	private String stationNo = "";
+	private String isEnabled = "";	
+	private String trainNo = "";
+	private String fromStationTelecode = "";
+	private String toStationTelecode = "";
+	private String departDate = "";
 	
 	public TrainNoEntity(String executeDate,String startStationName, String arriveTime, String stationTrainCode, String stationName,
 			String trainClassName, String serviceType, String startTime, String stopoverTime, String endStationName,
@@ -139,6 +139,13 @@ public class TrainNoEntity {
 	public void setDepartDate(String departDate) {
 		this.departDate = departDate;
 	}
+	
+	public String clover2Line() {
+		return executeDate + "," + startStationName + "," + arriveTime + "," + stationTrainCode + "," + stationName + ","
+				 + "," + trainClassName + "," + serviceType + "," + startTime + "," + stopoverTime + "," + endStationName
+				 + "," + stationNo + "," + isEnabled + "," + trainNo + "," + fromStationTelecode + "," + toStationTelecode
+				 + "," + departDate+"\r\n";
+	}	
 
 	@Override
 	public String toString() {

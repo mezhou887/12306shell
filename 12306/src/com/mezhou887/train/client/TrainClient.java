@@ -1,11 +1,13 @@
 package com.mezhou887.train.client;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import com.mezhou887.train.crawler.*;
 import com.mezhou887.train.entity.StationEntity;
 import com.mezhou887.train.entity.TrainEntity;
+import com.mezhou887.train.entity.TrainNoEntity;
 
 public class TrainClient {
 	
@@ -20,12 +22,12 @@ public class TrainClient {
 		List<TrainEntity> trainEntitys = trCrawler.parseTrainJson(trainList, stationMap);
 		trCrawler.saveCSVFile(trainEntitys);
 		
+		List<TrainNoEntity> trainNoList = new ArrayList<TrainNoEntity>();
 		for(TrainEntity entity: trainEntitys){
 			QueryTrainNoCrawler qtCrawler = new QueryTrainNoCrawler(entity);
-			qtCrawler.queryByTrainNo();
-			break;
+			trainNoList.addAll(qtCrawler.queryByTrainNo());
 		}
-		
+		new QueryTrainNoCrawler(null).saveCSVFile(trainNoList);
 		
 		
 	}

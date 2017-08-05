@@ -1,5 +1,9 @@
 package com.mezhou887.train.crawler;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -20,6 +24,7 @@ public class QueryTrainNoCrawler extends BaseCrawler {
 	
 	private String query_train_url = "https://kyfw.12306.cn/otn/czxx/queryByTrainNo?train_no={0}&from_station_telecode={1}&to_station_telecode={2}&depart_date={3}";
 	private TrainEntity e;
+	private String fileName = "all_train_no_list";
 	
     public QueryTrainNoCrawler(TrainEntity e) {
 		super();
@@ -70,6 +75,28 @@ public class QueryTrainNoCrawler extends BaseCrawler {
 
 	@Override
 	public void saveCSVFile(Object o) {
+		BufferedOutputStream buff = null;
+		try {
+			buff = new BufferedOutputStream(new FileOutputStream(new File(fileName + "_" + CrawlerUtils.filetime + ".csv")));
+			List<TrainNoEntity> list = (List<TrainNoEntity>)o;
+			for (TrainNoEntity entity :list)  {
+				buff.write(entity.clover2Line().getBytes());			
+			} 
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if(buff != null) {
+				try {
+					buff.flush();
+					buff.close();					
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
 		
 	}
 

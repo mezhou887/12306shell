@@ -2,14 +2,14 @@ package com.mezhou887.train.entity;
 
 public class TrainEntity {
 	
-	private String executeDate;  	 // 执行时间
-	private String trainDate;        // 出发时间
-	private String trainNo;          // 车次号
-	private String trainCode;   	 // 车次
-	private String startStationName; // 起始车站名
-	private String startStationCode; // 起点车站编号
-	private String endStationName;	 // 终点车站名
-	private String endStationCode;   // 终点车站编号
+	private String executeDate = "";  	 // 执行时间
+	private String trainDate = "";        // 出发时间
+	private String trainNo = "";          // 车次号
+	private String trainCode = "";   	 // 车次
+	private String startStationName = ""; // 起始车站名
+	private String startStationCode = ""; // 起点车站编号
+	private String endStationName = "";	 // 终点车站名
+	private String endStationCode = "";   // 终点车站编号
 	
 	public TrainEntity(String executeDate, String trainDate, String trainNo, String trainCode, String startStationName,
 			String startStationCode, String endStationName, String endStationCode) {
