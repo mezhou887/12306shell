@@ -1,5 +1,10 @@
 package com.mezhou887.train.crawler;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +22,7 @@ import com.mezhou887.train.util.CrawlerUtils;
 public class TrainListCrawler extends BaseCrawler {
 
 	private String train_list_url = "https://kyfw.12306.cn/otn/resources/js/query/train_list.js";
+    private String fileName = "all_train_list";
 	
 	
     public TrainListCrawler() {
@@ -78,8 +84,27 @@ public class TrainListCrawler extends BaseCrawler {
 
 	@Override
 	public void saveCSVFile(Object o) {
-		// TODO Auto-generated method stub
-		
+		BufferedOutputStream buff = null;
+		try {
+			buff = new BufferedOutputStream(new FileOutputStream(new File(fileName + "_" + CrawlerUtils.filetime + ".csv")));
+			List<TrainEntity> list = (List<TrainEntity>)o;
+			for (TrainEntity entity :list)  {
+				buff.write(entity.clover2Line().getBytes());			
+			} 
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if(buff != null) {
+				try {
+					buff.flush();
+					buff.close();					
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}		
 	}
 
 	@Override

@@ -18,7 +18,7 @@ public class TrainClient {
 		String trainList = trCrawler.getTrainList();
 		
 		List<TrainEntity> trainEntitys = trCrawler.parseTrainJson(trainList, stationMap);
-		System.out.println(trainEntitys.get(3).toString());
+		trCrawler.saveCSVFile(trainEntitys);
 		
 		for(TrainEntity entity: trainEntitys){
 			QueryTrainNoCrawler qtCrawler = new QueryTrainNoCrawler(entity);

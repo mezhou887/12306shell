@@ -77,9 +77,6 @@ public class StationNameCrawler extends BaseCrawler {
 				}
 			}
 		}
-
-		
-		
 	}
 
 	@Override

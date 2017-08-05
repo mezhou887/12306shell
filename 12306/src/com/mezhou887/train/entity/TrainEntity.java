@@ -72,6 +72,11 @@ public class TrainEntity {
 	public void setEndStationCode(String endStationCode) {
 		this.endStationCode = endStationCode;
 	}
+	
+	public String clover2Line() {
+		return executeDate + "," + trainDate + "," + trainNo + "," + trainCode + "," + startStationName + ","
+				+ "," + startStationCode + "," + endStationName + "," + endStationCode +"\r\n";
+	}	
 
 	@Override
 	public String toString() {
