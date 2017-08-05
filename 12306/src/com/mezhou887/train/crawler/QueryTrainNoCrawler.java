@@ -68,7 +68,7 @@ public class QueryTrainNoCrawler extends BaseCrawler {
 				lines.add(entity);
 			}
 		}catch (IOException e) {
-			e.printStackTrace();
+			return null;
 		}
 		return lines;
 	}

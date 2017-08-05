@@ -25,7 +25,10 @@ public class TrainClient {
 		List<TrainNoEntity> trainNoList = new ArrayList<TrainNoEntity>();
 		for(TrainEntity entity: trainEntitys){
 			QueryTrainNoCrawler qtCrawler = new QueryTrainNoCrawler(entity);
-			trainNoList.addAll(qtCrawler.queryByTrainNo());
+			List<TrainNoEntity> list = qtCrawler.queryByTrainNo();
+			if(list != null) {
+				trainNoList.addAll(list);				
+			}
 		}
 		new QueryTrainNoCrawler(null).saveCSVFile(trainNoList);
 		
