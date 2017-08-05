@@ -14,7 +14,7 @@ create table station (
 );
 alter table station COMMENT='³µÕ¾±àÂë±í';
 
-load data infile 'f:/12306/all_station.csv' 
+load data infile 'all_station.csv' 
 into table station 
 fields terminated by ',' optionally enclosed by '"' escaped by '"'
 lines terminated by '\n';

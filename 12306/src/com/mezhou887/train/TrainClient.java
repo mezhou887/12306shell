@@ -36,66 +36,22 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.mezhou887.train.util.CrawlerUtils;
 
-public class TrainClient {
+public class TrainClient extends BaseCrawler{
 	
-    private static final String HTTP = "http";
-    private static final String HTTPS = "https";
-    private static SSLConnectionSocketFactory sslsf = null;
-    private static PoolingHttpClientConnectionManager cm = null;
-    private static SSLContextBuilder builder = null;
+
     private static Date date = new Date();
-    private static String currentDate;
-    private static String filetime;
+    private static String currentDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+    private static String filetime = new SimpleDateFormat("yyyy_MM_dd_HH").format(date);;
     private static String station_name_url = "https://kyfw.12306.cn/otn/resources/js/framework/station_name.js?station_version=1.9002";
     private static String favorite_name_url = "https://kyfw.12306.cn/otn/resources/js/framework/favorite_name.js";
     private static String train_list_url = "https://kyfw.12306.cn/otn/resources/js/query/train_list.js?scriptVersion=1.0";
     private static String query_train_url = "https://kyfw.12306.cn/otn/czxx/queryByTrainNo?train_no={0}&from_station_telecode={1}&to_station_telecode={2}&depart_date={3}";
-	
-	static {
-        try {
-            builder = new SSLContextBuilder();
-            // 全部信任 不做身份鉴定
-            builder.loadTrustMaterial(null, new TrustStrategy() {
-                @Override
-                public boolean isTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
-                    return true;
-                }
-            });
-            sslsf = new SSLConnectionSocketFactory(builder.build(), new String[]{"SSLv2Hello", "SSLv3", "TLSv1", "TLSv1.2"}, null, NoopHostnameVerifier.INSTANCE);
-            Registry<ConnectionSocketFactory> registry = RegistryBuilder.<ConnectionSocketFactory>create()
-                    .register(HTTP, new PlainConnectionSocketFactory())
-                    .register(HTTPS, sslsf)
-                    .build();
-            cm = new PoolingHttpClientConnectionManager(registry);
-            cm.setMaxTotal(200);//max connection
-            currentDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
-            filetime = new SimpleDateFormat("yyyy_MM_dd_HH").format(date);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-	
-    public static CloseableHttpClient getHttpClient() throws Exception {
-        CloseableHttpClient httpClient = HttpClients.custom()
-                .setSSLSocketFactory(sslsf)
-                .setConnectionManager(cm)
-                .setConnectionManagerShared(true)
-                .build();
-        return httpClient;
-    }
+    private static String query_train_relationship = "https://kyfw.12306.cn/otn/leftTicket/query?leftTicketDTO.train_date={0}&leftTicketDTO.from_station={1}&leftTicketDTO.to_station={2}&purpose_codes=ADULT";
+    private static String query_ticket_price= "https://kyfw.12306.cn/otn/leftTicket/queryTicketPrice?train_no={0}&from_station_no={1}&to_station_no={2}&seat_types={3}&train_date={4}";
     
-    public static Map<String, Object> readHttpResponse(HttpResponse httpResponse) throws ParseException, IOException {
-        Map<String, Object> map = new HashMap<String, Object>();
-        HttpEntity entity = httpResponse.getEntity();
-        map.put("status", httpResponse.getStatusLine());
-        if (entity != null) {
-            String responseString = EntityUtils.toString(entity);
-            map.put("length", responseString.length());
-            map.put("content", responseString.replace("\r\n", ""));
-        }
-        return map;
-    }    
+   
 	
     // 获取所有的车次内容
 	public String getTrainList() {
@@ -103,7 +59,7 @@ public class TrainClient {
 			CloseableHttpClient httpclient = getHttpClient();
 			HttpGet httpGet = new HttpGet(train_list_url);
 			HttpResponse response = httpclient.execute(httpGet);
-			Map<String, Object> map = readHttpResponse(response);
+			Map<String, Object> map = CrawlerUtils.readHttpResponse(response);
 			String content = map.get("content").toString().substring(16);
 			return content;
 		} catch (Exception e) {
@@ -127,7 +83,7 @@ public class TrainClient {
 			CloseableHttpClient httpclient = getHttpClient();
 			HttpGet httpGet = new HttpGet(url);
 			HttpResponse response = httpclient.execute(httpGet);
-			Map<String, Object> map = readHttpResponse(response);
+			Map<String, Object> map = CrawlerUtils.readHttpResponse(response);
 			String content = map.get("content").toString();
 			content = content.substring(distinct, content.length()-2);
 			String[] list = content.split("@");
@@ -215,7 +171,7 @@ public class TrainClient {
 		CloseableHttpClient httpclient = getHttpClient();
 		HttpGet httpGet = new HttpGet(url);
 		HttpResponse response = httpclient.execute(httpGet);
-		Map<String, Object> map = readHttpResponse(response);
+		Map<String, Object> map = CrawlerUtils.readHttpResponse(response);
 		String content = map.get("content").toString();
 		JsonParser parse =new JsonParser();
 		JsonObject json = (JsonObject) parse.parse(content);
