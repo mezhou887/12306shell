@@ -11,7 +11,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mezhou887.train.BaseCrawler;
 import com.mezhou887.train.entity.StationEntity;
-import com.mezhou887.train.util.CrawlerUtils;
+import com.mezhou887.train.entity.TrainEntity;
 
 public class TrainListCrawler extends BaseCrawler {
 
@@ -41,8 +41,8 @@ public class TrainListCrawler extends BaseCrawler {
 	/**
 	 * 解析所有车次内容
 	 */
-	public List<String> parseTrainJson(String content, Map<String, StationEntity> stationMap) {
-		List<String> lines = new ArrayList<String>();
+	public List<TrainEntity> parseTrainJson(String content, Map<String, StationEntity> stationMap) {
+		List<TrainEntity> results = new ArrayList<TrainEntity>();
 		JsonParser parse =new JsonParser();
 		JsonObject json = (JsonObject) parse.parse(content);
 		
@@ -60,21 +60,21 @@ public class TrainListCrawler extends BaseCrawler {
 					String trainNameFix = trainName.substring(0, trainName.length()-1);
 					String startStationName = trainNameFix.split("-")[0];
 					String startStationCode = "";
-					if(!CrawlerUtils.set.contains(startStationName)) {
-						startStationCode = stationMap.get(startStationName).getCode_id();						
+					if(stationMap.containsKey(startStationName)) {
+						startStationCode = stationMap.get(startStationName).getCode_id();												
 					}
 					String endStationName = trainNameFix.split("-")[1];	
 					String endStationCode = "";
-					if(!CrawlerUtils.set.contains(endStationName) ) {
+					if(stationMap.containsKey(endStationName)) {
 						endStationCode = stationMap.get(endStationName).getCode_id();						
 					}
-					String line = executeDate + "," + trainDate + "," + trainNo + "," + trainCode + "," 
-								+ startStationName + "," + startStationCode + "," + endStationName + "," + endStationCode +"\r\n";
-					lines.add(line);
+					TrainEntity entity = new TrainEntity(executeDate, trainDate, trainNo, trainCode, 
+									startStationName, startStationCode, endStationName, endStationCode);
+					results.add(entity);
 				}
 			}
 		}
-		return lines;
+		return results;
 	}
 
 	@Override

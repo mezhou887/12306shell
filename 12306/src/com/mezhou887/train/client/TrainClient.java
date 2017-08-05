@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.mezhou887.train.crawler.*;
 import com.mezhou887.train.entity.StationEntity;
+import com.mezhou887.train.entity.TrainEntity;
 
 public class TrainClient {
 	
@@ -19,8 +20,16 @@ public class TrainClient {
 		TrainListCrawler trCrawler = new TrainListCrawler(executeDate);
 		String trainList = trCrawler.getTrainList();
 		
-		List<String> trainLines = trCrawler.parseTrainJson(trainList, stationMap);
-		System.out.println(trainLines.get(1));
+		List<TrainEntity> trainEntitys = trCrawler.parseTrainJson(trainList, stationMap);
+		System.out.println(trainEntitys.get(3).toString());
+		
+		for(TrainEntity entity: trainEntitys){
+			QueryTrainNoCrawler qtCrawler = new QueryTrainNoCrawler(entity, executeDate);
+			System.out.println(qtCrawler.getTrainNo());
+			break;
+		}
+		
+		
 		
 	}
 

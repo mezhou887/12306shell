@@ -55,5 +55,12 @@ public class StationEntity {
 	public void setNo(String no) {
 		this.no = no;
 	}
+	@Override
+	public String toString() {
+		return "StationEntity [shortname1=" + shortname1 + ", name=" + name + ", code_id=" + code_id + ", fullname="
+				+ fullname + ", shortname2=" + shortname2 + ", no=" + no + "]";
+	}
+	
+	
 
 }

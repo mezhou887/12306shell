@@ -11,23 +11,18 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mezhou887.train.BaseCrawler;
+import com.mezhou887.train.entity.TrainEntity;
 import com.mezhou887.train.util.CRequest;
 
 public class QueryTrainNoCrawler extends BaseCrawler {
 	
 	private String query_train_url = "https://kyfw.12306.cn/otn/czxx/queryByTrainNo?train_no={0}&from_station_telecode={1}&to_station_telecode={2}&depart_date={3}";
-	private String trainNo;
-	private String startStationCode;
-	private String endStationCode;
-	private String trainDate;
 	private String executeDate;
+	private TrainEntity e;
 	
-    public QueryTrainNoCrawler(String trainNo, String startStationCode, String endStationCode, String trainDate, String executeDate) {
+    public QueryTrainNoCrawler(TrainEntity e, String executeDate) {
 		super();
-		this.trainNo = trainNo;
-		this.startStationCode = startStationCode;
-		this.endStationCode = endStationCode;
-		this.trainDate = trainDate;
+		this.e = e;
 		this.executeDate = executeDate;
 	}
 
@@ -36,7 +31,7 @@ public class QueryTrainNoCrawler extends BaseCrawler {
      */
 	public String getTrainNo() {
 		try {
-			String url = MessageFormat.format(query_train_url, trainNo, startStationCode, endStationCode, trainDate);
+			String url = MessageFormat.format(query_train_url, e.getTrainNo(), e.getStartStationCode(), e.getEndStationCode(), e.getTrainDate());
 			Map<String, Object> map = getHttpResponse(url);
 			String content = map.get("content").toString();
 			return content;
@@ -45,7 +40,6 @@ public class QueryTrainNoCrawler extends BaseCrawler {
 			return null;
 		}
 	}	
-	
 	
 	
 	// 根据车次查询途径站点
