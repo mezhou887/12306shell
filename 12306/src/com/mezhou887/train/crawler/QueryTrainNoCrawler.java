@@ -40,7 +40,6 @@ public class QueryTrainNoCrawler extends BaseCrawler {
 		try {
 			Map<String, Object> map = getHttpResponse(url);
 			String content = map.get("content").toString();
-			System.out.println(content);
 			JsonParser parse =new JsonParser();
 			JsonObject json = (JsonObject) parse.parse(content);
 			JsonElement dataEle = json.get("data").getAsJsonObject().get("data");
