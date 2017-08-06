@@ -40,6 +40,7 @@ public class QueryTrainNoCrawler extends BaseCrawler {
 		try {
 			Map<String, Object> map = getHttpResponse(url);
 			String content = map.get("content").toString();
+			System.out.println(content);
 			JsonParser parse =new JsonParser();
 			JsonObject json = (JsonObject) parse.parse(content);
 			JsonElement dataEle = json.get("data").getAsJsonObject().get("data");
@@ -67,7 +68,7 @@ public class QueryTrainNoCrawler extends BaseCrawler {
 						stopoverTime, endStationName, stationNo, isEnabled, trainNo, fromStationTelecode, toStationTelecode,departDate);
 				lines.add(entity);
 			}
-		}catch (IOException e) {
+		}catch (Exception e) {
 			return null;
 		}
 		return lines;

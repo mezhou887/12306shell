@@ -23,11 +23,21 @@ public class TrainClient {
 		trCrawler.saveCSVFile(trainEntitys);
 		
 		List<TrainNoEntity> trainNoList = new ArrayList<TrainNoEntity>();
+		String maxDate = "";
 		for(TrainEntity entity: trainEntitys){
-			QueryTrainNoCrawler qtCrawler = new QueryTrainNoCrawler(entity);
-			List<TrainNoEntity> list = qtCrawler.queryByTrainNo();
-			if(list != null) {
-				trainNoList.addAll(list);				
+			String trainDate = entity.getTrainDate();  
+			if(trainDate.compareTo(maxDate) > 0) {
+				maxDate = trainDate;
+			}
+		}
+			
+		for(TrainEntity entity: trainEntitys){
+			if(maxDate.equals(entity.getTrainDate())) {
+				QueryTrainNoCrawler qtCrawler = new QueryTrainNoCrawler(entity);
+				List<TrainNoEntity> list = qtCrawler.queryByTrainNo();
+				if(list != null) {
+					trainNoList.addAll(list);				
+				}				
 			}
 		}
 		new QueryTrainNoCrawler(null).saveCSVFile(trainNoList);
