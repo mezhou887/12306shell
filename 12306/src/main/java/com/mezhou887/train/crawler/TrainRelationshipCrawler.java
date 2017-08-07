@@ -2,8 +2,12 @@ package com.mezhou887.train.crawler;
 
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mezhou887.train.BaseCrawler;
@@ -27,17 +31,25 @@ public class TrainRelationshipCrawler extends BaseCrawler {
 		this.toStation = toStation;
 	}
 
-	public void queryTrainRelationship() {
+	public List<String> queryTrainRelationship() {
+		List<String> result = new ArrayList<String>();
 		String url = MessageFormat.format(query_train_relationship, trainDate, fromStation, toStation);
 		try {
 			Map<String, Object> map = getHttpResponse(url);
 			String content = map.get("content").toString();
 			JsonParser parse =new JsonParser();
 			JsonObject json = (JsonObject) parse.parse(content);
+			JsonElement dataEle = json.get("data").getAsJsonObject().get("result");
+			JsonArray array = dataEle.getAsJsonArray();
+			for(JsonElement element: array) { 
+				String trainObj = element.getAsString().replace("\\|", ",");
+				result.add(trainObj);
+			}
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return result;
 	}
 	
 	@Override
